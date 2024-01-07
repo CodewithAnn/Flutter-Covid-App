@@ -1,4 +1,7 @@
+import 'package:covid_app/model/covid_world_stats.dart';
+import 'package:covid_app/services/utilliteis/stats_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class WorldStat extends StatefulWidget {
@@ -27,44 +30,101 @@ class _WorldStatState extends State<WorldStat> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     var _mediaQuery = MediaQuery.of(context);
+    // object of World stats api
+    StatServices _statsServices = StatServices();
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              height: _mediaQuery.size.height * 0.01,
-            ),
-            PieChart(
-              dataMap: {"Total": 100, "Death": 68, "Recover": 32},
-              animationDuration: Duration(milliseconds: 1200),
-              chartType: ChartType.ring,
-              chartRadius: _mediaQuery.size.width / 3.6,
-              colorList: _colorList,
-              legendOptions: LegendOptions(
-                legendPosition: LegendPosition.left,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              SizedBox(
+                height: _mediaQuery.size.height * 0.01,
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  vertical: _mediaQuery.size.height * 0.06,
-                  horizontal: _mediaQuery.size.width * 0.029),
-              child: Card(
-                child: Column(
-                  children: [
-                    _reUseableRow(title: "Total", value: "300"),
-                    _reUseableRow(title: "Total", value: "300"),
-                    _reUseableRow(title: "Total", value: "300"),
-                    _reUseableRow(title: "Total", value: "300"),
-                  ],
-                ),
+              FutureBuilder(
+                future: _statsServices.fetchWordStats(),
+                builder: (context, AsyncSnapshot<CovidWorldStats> snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        PieChart(
+                          dataMap: {
+                            "Total":
+                                double.parse(snapshot.data!.cases!.toString()),
+                            "Death":
+                                double.parse(snapshot.data!.deaths.toString()),
+                            "Recover": double.parse(
+                                snapshot.data!.recovered.toString())
+                          },
+                          animationDuration: Duration(milliseconds: 1200),
+                          chartType: ChartType.ring,
+                          chartRadius: _mediaQuery.size.width / 3.9,
+                          colorList: _colorList,
+                          chartValuesOptions: ChartValuesOptions(
+                              showChartValuesInPercentage: true,
+                              showChartValuesOutside: false),
+                          legendOptions: LegendOptions(
+                            legendPosition: LegendPosition.left,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: _mediaQuery.size.height * 0.06,
+                              horizontal: _mediaQuery.size.width * 0.029),
+                          child: Card(
+                            child: Column(
+                              children: [
+                                _reUseableRow(
+                                    title: "Cases",
+                                    value: snapshot.data!.cases.toString()),
+                                _reUseableRow(
+                                    title: "Recovered",
+                                    value: snapshot.data!.recovered.toString()),
+                                _reUseableRow(
+                                    title: "Today cases",
+                                    value:
+                                        snapshot.data!.todayCases.toString()),
+                                _reUseableRow(
+                                    title: "Today Deaths",
+                                    value:
+                                        snapshot.data!.todayDeaths.toString()),
+                                _reUseableRow(
+                                    title: "Total Deaths",
+                                    value: snapshot.data!.deaths.toString()),
+                                _reUseableRow(
+                                    title: "Active Cases",
+                                    value: snapshot.data!.active.toString()),
+                                _reUseableRow(
+                                    title: "Affected Countries",
+                                    value: snapshot.data!.affectedCountries
+                                        .toString()),
+                                _reUseableRow(
+                                    title: "Critical",
+                                    value: snapshot.data!.critical.toString()),
+                              ],
+                            ),
+                          ),
+                        ),
+                        // Elevated Button for Tracking Countries Data
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text("Track Country Data"),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Expanded(
+                        flex: 1,
+                        child: SpinKitThreeInOut(
+                          color: Colors.red,
+                          size: 60,
+                          controller: _animationController,
+                        ));
+                  }
+                },
               ),
-            ),
-            // Elevated Button for Tracking Countries Data
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Track Country Data"),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
