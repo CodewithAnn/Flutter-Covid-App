@@ -1,3 +1,4 @@
+import 'package:covid_app/Screens/country_list.dart';
 import 'package:covid_app/model/covid_world_stats.dart';
 import 'package:covid_app/services/utilliteis/stats_services.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +108,13 @@ class _WorldStatState extends State<WorldStat> with TickerProviderStateMixin {
                         ),
                         // Elevated Button for Tracking Countries Data
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CountryList(),
+                                ));
+                          },
                           child: Text("Track Country Data"),
                         ),
                       ],
