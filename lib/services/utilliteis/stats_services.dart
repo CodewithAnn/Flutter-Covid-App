@@ -11,7 +11,7 @@ class StatServices {
     final response = await http.get(uri);
     var data = jsonDecode(response.body);
 
-    if (response == 200) {
+    if (response.statusCode == 200) {
       return CovidWorldStats.fromJson(data);
     } else {
       throw Exception('Error');
