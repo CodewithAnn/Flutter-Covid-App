@@ -51,37 +51,76 @@ class _CountryListState extends State<CountryList> {
                   return ListView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          ListTile(
-                            title: Text(
-                              snapshot.data![index]['country'].toString(),
-                              style: const TextStyle(
-                                  fontSize: 19, fontWeight: FontWeight.w600),
-                            ),
-                            subtitle: Text(
-                              snapshot.data![index]['cases'].toString(),
-                              style: const TextStyle(
-                                fontSize: 16,
+                      // storing country name for search
+                      String _name = snapshot.data![index]['country'];
+
+                      if (_searchController.text.isEmpty) {
+                        // if user search nothing then
+                        // it is showing list Countries with cases
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                snapshot.data![index]['country'].toString(),
+                                style: const TextStyle(
+                                    fontSize: 19, fontWeight: FontWeight.w600),
                               ),
-                            ),
-                            leading: Image(
-                              height: 70,
-                              width: 70,
-                              image: NetworkImage(
-                                snapshot.data![index]['countryInfo']["flag"],
+                              subtitle: Text(
+                                snapshot.data![index]['cases'].toString(),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
                               ),
-                            ),
-                          )
-                        ],
-                      );
+                              leading: Image(
+                                height: 70,
+                                width: 70,
+                                image: NetworkImage(
+                                  snapshot.data![index]['countryInfo']["flag"],
+                                ),
+                              ),
+                            )
+                          ],
+                        );
+                      } else if (_name
+                          .toLowerCase()
+                          .contains(_searchController.text.toLowerCase())) {
+                        // if search name is matched with country name then it is showing
+                        // the matched countries with cases
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                snapshot.data![index]['country'].toString(),
+                                style: const TextStyle(
+                                    fontSize: 19, fontWeight: FontWeight.w600),
+                              ),
+                              subtitle: Text(
+                                snapshot.data![index]['cases'].toString(),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              leading: Image(
+                                height: 70,
+                                width: 70,
+                                image: NetworkImage(
+                                  snapshot.data![index]['countryInfo']["flag"],
+                                ),
+                              ),
+                            )
+                          ],
+                        );
+                      } else {
+                        // otherwise show nothing just empty screen
+                        return Container();
+                      }
                     },
                   );
                 } else {
                   return ListView.builder(
                     itemCount: 6,
                     itemBuilder: (context, index) {
-                      // shimmer effect 
+                      // shimmer effect
                       return Shimmer.fromColors(
                         baseColor: Colors.grey.shade700,
                         highlightColor: Colors.grey.shade100,
