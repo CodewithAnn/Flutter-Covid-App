@@ -1,5 +1,6 @@
 import 'package:covid_app/services/utilliteis/stats_services.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CountryList extends StatefulWidget {
   const CountryList({super.key});
@@ -77,7 +78,40 @@ class _CountryListState extends State<CountryList> {
                     },
                   );
                 } else {
-                  return Text('Loding');
+                  return ListView.builder(
+                    itemCount: 6,
+                    itemBuilder: (context, index) {
+                      // shimmer effect 
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade700,
+                        highlightColor: Colors.grey.shade100,
+                        child: Column(
+                          children: [
+                            ListTile(
+                              // country name empty(shimmer)
+                              title: Container(
+                                height: 7,
+                                width: 60,
+                                color: Colors.white,
+                              ),
+                              //  cases empty(shimmer)
+                              subtitle: Container(
+                                height: 7,
+                                width: 60,
+                                color: Colors.white,
+                              ),
+                              // country flag empty(shimmer)
+                              leading: Container(
+                                height: 70,
+                                width: 70,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 }
               },
             ),
