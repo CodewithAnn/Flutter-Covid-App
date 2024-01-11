@@ -1,3 +1,4 @@
+import 'package:covid_app/Screens/deatail_Screen.dart';
 import 'package:covid_app/services/utilliteis/stats_services.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -27,17 +28,19 @@ class _CountryListState extends State<CountryList> {
       body: SafeArea(
           child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextFormField(
-              onChanged: (value) {
-                setState(() {});
-              },
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: "Search by Country name",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(23),
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: TextFormField(
+                onChanged: (value) {
+                  setState(() {});
+                },
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: "Search by Country name",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(23),
+                  ),
                 ),
               ),
             ),
@@ -59,23 +62,55 @@ class _CountryListState extends State<CountryList> {
                         // it is showing list Countries with cases
                         return Column(
                           children: [
-                            ListTile(
-                              title: Text(
-                                snapshot.data![index]['country'].toString(),
-                                style: const TextStyle(
-                                    fontSize: 19, fontWeight: FontWeight.w600),
-                              ),
-                              subtitle: Text(
-                                snapshot.data![index]['cases'].toString(),
-                                style: const TextStyle(
-                                  fontSize: 16,
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailScreen(
+                                      name: snapshot.data![index]['country']
+                                          .toString(),
+                                      image: snapshot.data![index]
+                                              ['countryInfo']["flag"]
+                                          .toString(),
+                                      cases: snapshot.data![index]['cases'],
+                                      recovered: snapshot.data![index]
+                                          ['recovered'],
+                                      deaths: snapshot.data![index]['deaths'],
+                                      critical: snapshot.data![index]
+                                          ["critical"],
+                                      todayCases: snapshot.data![index]
+                                          ["todayCases"],
+                                      todayDeaths: snapshot.data![index]
+                                          ["todayDeaths"],
+                                      todayRecovered: snapshot.data![index]
+                                          ["todayRecovered"],
+                                      active: snapshot.data![index]["active"],
+                                      tests: snapshot.data![index]["tests"],
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                title: Text(
+                                  snapshot.data![index]['country'].toString(),
+                                  style: const TextStyle(
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w600),
                                 ),
-                              ),
-                              leading: Image(
-                                height: 70,
-                                width: 70,
-                                image: NetworkImage(
-                                  snapshot.data![index]['countryInfo']["flag"],
+                                subtitle: Text(
+                                  snapshot.data![index]['cases'].toString(),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                leading: Image(
+                                  height: 70,
+                                  width: 70,
+                                  image: NetworkImage(
+                                    snapshot.data![index]['countryInfo']
+                                        ["flag"],
+                                  ),
                                 ),
                               ),
                             )
@@ -88,23 +123,55 @@ class _CountryListState extends State<CountryList> {
                         // the matched countries with cases
                         return Column(
                           children: [
-                            ListTile(
-                              title: Text(
-                                snapshot.data![index]['country'].toString(),
-                                style: const TextStyle(
-                                    fontSize: 19, fontWeight: FontWeight.w600),
-                              ),
-                              subtitle: Text(
-                                snapshot.data![index]['cases'].toString(),
-                                style: const TextStyle(
-                                  fontSize: 16,
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => DetailScreen(
+                                      name: snapshot.data![index]['country']
+                                          .toString(),
+                                      image: snapshot.data![index]
+                                              ['countryInfo']["flag"]
+                                          .toString(),
+                                      cases: snapshot.data![index]['cases'],
+                                      recovered: snapshot.data![index]
+                                          ['recovered'],
+                                      deaths: snapshot.data![index]['deaths'],
+                                      critical: snapshot.data![index]
+                                          ["critical"],
+                                      todayCases: snapshot.data![index]
+                                          ["todayCases"],
+                                      todayDeaths: snapshot.data![index]
+                                          ["todayDeaths"],
+                                      todayRecovered: snapshot.data![index]
+                                          ["todayRecovered"],
+                                      active: snapshot.data![index]["active"],
+                                      tests: snapshot.data![index]["tests"],
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                title: Text(
+                                  snapshot.data![index]['country'].toString(),
+                                  style: const TextStyle(
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w600),
                                 ),
-                              ),
-                              leading: Image(
-                                height: 70,
-                                width: 70,
-                                image: NetworkImage(
-                                  snapshot.data![index]['countryInfo']["flag"],
+                                subtitle: Text(
+                                  snapshot.data![index]['cases'].toString(),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                leading: Image(
+                                  height: 70,
+                                  width: 70,
+                                  image: NetworkImage(
+                                    snapshot.data![index]['countryInfo']
+                                        ["flag"],
+                                  ),
                                 ),
                               ),
                             )
